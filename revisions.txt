@@ -1,0 +1,35 @@
+commit 845dfa3acaf319e25d257f51daa9175d62ac5ecf
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 13:41:27 2026 -0500
+
+    Finished implematation and passed tests
+
+commit 63078c87a9d3bc9fba58639e2c8b442ce9d5d581
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 11:09:42 2026 -0500
+
+    Passed first cipher test! Adding output mode
+
+commit 0cc5680ce47f23d2e850a30f7ea34e075303d750
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 10:57:49 2026 -0500
+
+    Add argument validation and keystream setup to mcrypt
+
+commit f0c8f232a572b61b23bc429202d9c264913d658f
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 10:21:32 2026 -0500
+
+    Implement the KStream cipher
+
+commit 2d48d04d20d5f6771868907d94b73962603faccf
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 10:17:58 2026 -0500
+
+    Made next_byte and ks_create
+
+commit 18b547e5d4b3397b038172742c002fcb02994d16
+Author: Isaiah William Smith <iws7238@rit.edu>
+Date:   Fri Nov 13 09:51:14 2026 -0500
+
+    Added provided files, and made .c and .h files

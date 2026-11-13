@@ -32,15 +32,14 @@ void ks_destroy(KStream *stream);
 /**
  * @brief Encrypt or decrypt bytes using the next bytes of the keystream
  * @param stream The keystream to use and advance
- * @param input The caller-owned buffer containing the bytes to translate
- * @param output The caller-owned buffer that receives the translated bytes
+ * @param input The caller owned buffer containing the bytes to translate
+ * @param output The caller owned buffer that receives the translated bytes
  * @param count The number of bytes to translate
  * @pre stream points to a valid keystream
  * @pre input and output are separate buffers of at least count bytes each
  * @post output contains count translated bytes, and stream has advanced
  *       by count bytes
  */
-void ks_translate(KStream *stream, const byte *input, byte *output,
-                  size_t count);
+void ks_translate(KStream *stream, const byte *input, byte *output,size_t count);
 
 #endif
