@@ -49,7 +49,7 @@ KStream *ks_create(unsigned long key) {
 
     // Start generation at zero and discard the first 1024 bytes
     stream->i = 0;
-    stream->j = 0;
+    stream->j = j;
     for  (size_t count = 0; count < 1024; count++ ) {
         next_byte(stream);
     }

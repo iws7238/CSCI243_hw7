@@ -37,21 +37,28 @@ static int read_key(const char *path, unsigned long *key) {
 
 
 /**
- * @brief Translate an input file into a binary output file
+ * @brief Translate an input file into a binary output file or stdout
  * @param stream The keystream to use
  * @param in_path The input file name
  * @param out_path The output file name
  * @return EXIT_SUCCESS if the file was written, EXIT_FAILURE otherwise
  */
-static int translate_file(KStream *stream, const char *in_path,
-                          const char *out_path) {
+static int translate_file(KStream *stream, const char *in_path, const char *out_path) {
     FILE *in_file = fopen(in_path, "rb");
     if (in_file == NULL) {
         perror(in_path);
         return EXIT_FAILURE;
     }
 
-    FILE *out_file = fopen(out_path, "wb");
+    int to_stdout = strcmp(out_path, "-") == 0;
+    FILE *out_file;
+
+    if (to_stdout) {
+        out_file = stdout;
+    } else {
+        out_file = fopen(out_path, "wb");
+    }
+
     if (out_file == NULL) {
         perror(out_path);
         fclose(in_file);
@@ -67,20 +74,45 @@ static int translate_file(KStream *stream, const char *in_path,
     while ((count = fread(input, 1, sizeof input, in_file)) > 0) {
         ks_translate(stream, input, output, count);
 
-        if (fwrite(output, 1, count, out_file) != count) {
+       if (to_stdout) {
+            // print ASCII as is and use hex for the rest
+            for (size_t i = 0; i < count; i++) {
+                if (output[ i ] <= 127) {
+                    fputc(output[ i ], out_file);
+                } else {
+                    fprintf(out_file, "%02x", (unsigned int)output[ i ]);
+                }
+            }
+
+            if (ferror(out_file)) {
+                perror("stdout");
+                status = EXIT_FAILURE;
+                break;
+            }
+        } else if (fwrite(output, 1, count, out_file) != count) {
             perror(out_path);
             status = EXIT_FAILURE;
             break;
         }
     }
 
-    // a zero-byte read can mean EOF or a read error
+    // a zero byte read can mean EOF or a read error
     if (ferror(in_file)) {
         perror(in_path);
         status = EXIT_FAILURE;
     }
 
     fclose(in_file);
+
+    if (to_stdout) {
+        if (fflush(out_file) == EOF) {
+            perror("stdout");
+            status = EXIT_FAILURE;
+        }
+    } else if (fclose(out_file) == EOF) {
+        perror(out_path);
+        status = EXIT_FAILURE;
+    }
 
     return status;
 }
