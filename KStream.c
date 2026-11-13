@@ -59,7 +59,6 @@ KStream *ks_create(unsigned long key) {
 
 
 void ks_translate(KStream *stream, const byte *input, byte *output,size_t count) {
-    // Use one keystream byte for each input byte
     for (size_t i = 0; i < count; i++) {
         output[i] = input[i] ^ next_byte(stream);
     }
