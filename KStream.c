@@ -8,11 +8,7 @@ struct KStream {
     size_t j;
 };
 
-/**
- * @brief Advance the keystream and return its next byte
- * @param stream The initialized keystream to advance
- * @return The next keystream byte
- */
+
 static byte next_byte( KStream *stream) {
     // Advance i and j, % 256 to wrap around after 255
     stream->i = ( stream->i + 1) % 256;
@@ -27,11 +23,6 @@ static byte next_byte( KStream *stream) {
     return stream->S[B];
 }
 
-/**
- * @brief Create and prime a keystream using a binary key
- * @param key The key read from the binary key file
- * @return The new keystream, or NULL if allocation fails
- */
 KStream *ks_create(unsigned long key) {
     // Allocate memory for stream
     KStream *stream = malloc(sizeof *stream);
@@ -66,10 +57,15 @@ KStream *ks_create(unsigned long key) {
     return stream;
 }
 
-void ks_destroy() {
-    return;
+
+void ks_translate(KStream *stream, const byte *input, byte *output,size_t count) {
+    // Use one keystream byte for each input byte
+    for (size_t i = 0; i < count; i++) {
+        output[i] = input[i] ^ next_byte(stream);
+    }
 }
 
-void ks_translate() {
-    return;
+
+void ks_destroy(KStream *stream) {
+    free(stream);
 }
